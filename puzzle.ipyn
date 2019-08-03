@@ -1,0 +1,48 @@
+import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt
+import seaborn as sns
+import math
+
+hopper_data = pd.read_csv("../input/puzzle.csv", header=None)
+hopper_data[:3]
+
+sns.pairplot(hopper_data, height=6)
+plt.show()
+
+sns.scatterplot(hopper_data[1], hopper_data[0])
+plt.show()
+
+hopper_data_converted = pd.DataFrame()
+hopper_data_converted[0] = hopper_data[0]*180/math.pi
+hopper_data_converted[1] = hopper_data[1]*180/math.pi
+
+hopper_data_converted[:3]
+
+sns.scatterplot(hopper_data_converted[1], hopper_data_converted[0])
+plt.show()
+
+fig, ax = plt.subplots(figsize=(20,25))
+world = Basemap(ax=ax, projection='cyl')
+world.fillcontinents(color='grey', alpha=0.3)
+world.drawcoastlines(linewidth=0.1, color="white")
+
+world.scatter(hopper_data_converted[1], hopper_data_converted[0], latlon=True, c='Blue', alpha=0.5, s=2)
+
+Edinburgh = [-3.1883, 55.9533]
+New_York = [-74.0060, 40.7128]
+
+lons = [Edinburgh[0], New_York[0]]
+lats = [Edinburgh[1], New_York[1]]
+
+x, y = world(lons, lats)
+
+world.plot(x, y, marker=None, color='m', linestyle='--')
+
+plt.text(Edinburgh[0], Edinburgh[1]+4, 'Edinburgh',fontsize=12,fontweight='bold',
+                    ha='center',va='center',color='k',
+                    bbox=dict(facecolor='b', alpha=0.2))
+plt.text(New_York[0]+13, New_York[1]-3.75, 'New York',fontsize=12,fontweight='bold',
+                    ha='center',va='center',color='k',
+                    bbox=dict(facecolor='b', alpha=0.2))
+plt.show()
